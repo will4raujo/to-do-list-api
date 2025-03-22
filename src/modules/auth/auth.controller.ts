@@ -11,12 +11,14 @@ import {
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { UserDto } from '../users/dto/users.dto';
+import { Public } from 'src/decorators/skipAuth.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @HttpCode(HttpStatus.OK)
+  @Public()
   @Post('login')
   async signIn(@Body() signInDto: Record<string, any>) {
     return await this.authService.signIn(
@@ -34,6 +36,7 @@ export class AuthController {
   }
 
   @HttpCode(HttpStatus.CREATED)
+  @Public()
   @Post('register')
   async signUp(@Body() signUpDto: UserDto) {
     return await this.authService.signUp(signUpDto);
