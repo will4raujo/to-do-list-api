@@ -18,8 +18,8 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(
+  async signIn(@Body() signInDto: Record<string, any>) {
+    return await this.authService.signIn(
       signInDto.username as string,
       signInDto.password as string,
     );
@@ -35,7 +35,7 @@ export class AuthController {
 
   @HttpCode(HttpStatus.CREATED)
   @Post('register')
-  signUp(@Body() signUpDto: UserDto) {
-    return this.authService.signUp(signUpDto);
+  async signUp(@Body() signUpDto: UserDto) {
+    return await this.authService.signUp(signUpDto);
   }
 }
