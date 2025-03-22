@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
+import { UserDto } from '../users/dto/users.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -30,5 +31,11 @@ export class AuthController {
     @Request() req: { user: { id: string; username: string; email: string } },
   ) {
     return req.user;
+  }
+
+  @HttpCode(HttpStatus.CREATED)
+  @Post('register')
+  signUp(@Body() signUpDto: UserDto) {
+    return this.authService.signUp(signUpDto);
   }
 }
