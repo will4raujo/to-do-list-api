@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id          Int         @id @default(autoincrement())
+  name        String  
+  email       String      @unique
+  password    String
+  tasks       Tasks[]
+
+  @@map(name: "users")
+}
+
+model Tasks {
+  id          Int         @id @default(autoincrement())
+  title       String
+  content     String?
+  status      TaskStatus
+  userId      Int
+
+  user        Users       @relation(fields: [userId], references: [id])
+
+  @@map(name: "tasks")
+}
+
+enum TaskStatus {
+  OPEN
+  IN_PROGRESS
+  DONE
+}
+
+//CREATE TABLE users (
+//  id        SERIAL PRIMARY KEY,
+//  name      VARCHAR(255)  NOT NULL,
+//  email     VARCHAR(255)  NOT NULL,
+//  password  VARCHAR(255)  NOT NULL
+//);
+
+//CREATE TABLE tasks (
+//  id        SERIAL        PRIMARY KEY,
+//  title     VARCHAR(255)  NOT NULL,
+//  content   TEXT          DEFAULT NULL,
+//  status    VARCHAR(255),
+//  user_id   INT REFERENCES users(id)
+//);
+
+//CREATE TYPE task_status AS ENUM ('OPEN', 'IN_PROGRESS', 'DONE');
