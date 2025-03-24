@@ -12,16 +12,22 @@ export class AuthService {
   ) {}
 
   async signIn(
-    username: string,
-    pass: string,
-  ): Promise<{ access_token: string }> {
-    const user = this.usersService.findOne(username);
-    if (user?.password !== pass) {
-      throw new UnauthorizedException();
+    email: string,
+    password: string,
+  ): Promise<{ access_token: string; user: any }> {
+    const user = await this.usersService.findOne(email);
+    if (!user) {
+      throw new UnauthorizedException('Credenciais inválidas');
     }
-    const payload = { sub: user.userId, username: user.username };
+
+    if (user.password !== password) {
+      throw new UnauthorizedException('Credenciais inválidas');
+    }
+
+    const payload = { sub: user.id, username: user.name };
     return {
       access_token: await this.jwtService.signAsync(payload),
+      user,
     };
   }
 
