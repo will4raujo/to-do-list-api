@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
-  findOne(username: string) {
-    if (username === '') {
-      return null;
-    }
-    return {
-      userId: '1',
-      username: 'john',
-      password: 'changeme',
-    };
+  constructor(private prisma: PrismaClient) {}
+
+  findOne(email: string) {
+    return this.prisma.users.findFirst({
+      where: {
+        email,
+      },
+    });
   }
 }
